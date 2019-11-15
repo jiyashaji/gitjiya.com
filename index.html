@@ -5,30 +5,17 @@
 		<script type="text/javascript" src="https://online.tableau.com/javascripts/api/tableau-2.min.js"></script>
         <script type="text/javascript">
             var viz, sheet, table;
-
-            function initViz() {
-		var containerDiv = document.getElementById("vizContainer"),
-                    url = "https://eu-west-1a.online.tableau.com/#/site/jiyasdash/views/Book1
-                    options = {
-                        hideTabs: true,
-                        hideToolbar: true,
-                        onFirstInteractive: function () {
-                            document.getElementById('getData').disabled = false; // Enable our button
-                        }
-                    };
-                viz = new tableau.Viz(containerDiv, url, options);
-            }
-
             function getUnderlyingData(){
-                sheet = viz.getWorkbook().getActiveSheet().getWorksheets().get("Sheet 1");
-		 // If the active sheet is not a dashboard, then you can just enter:
-		 // viz.getWorkbook().getActiveSheet();
-                options = {
-                    maxRows: 10, // Max rows to return. Use 0 to return all rows
-                    ignoreAliases: false,
-                    ignoreSelection: true,
-                    includeAllColumns: false
-                };
+				options = {
+				maxRows: 0,
+				ignoreAliases: false,
+				ignoreSelection: true,
+				includeAllColumns: false
+			};
+			sheet = viz.getWorkbook().getActiveSheet();
+			sheet.getUnderlyingDataAsync(options).then(function (t) {
+			var data = t.getData();                                
+			});
 
                 sheet.getUnderlyingDataAsync(options).then(function(t){
                        table = t;
@@ -39,7 +26,7 @@
         </script>
     </head>
 
-    <body onload="initViz();">
+    <body>
         <div class="page-header">
             <h1>getData() Basic Example</h1>
             <p>Click the "Get Data" button to get underlying data for the viz.</p>
